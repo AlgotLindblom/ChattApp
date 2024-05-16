@@ -16,6 +16,7 @@ namespace ChattApp
     {
         TcpListener listener;
         int port = 12345;
+        IPEndPoint[] clientList = new IPEndPoint[100];
 
         // Objects need to be in scope. 
         // BUTTON
@@ -34,6 +35,8 @@ namespace ChattApp
             this.Width = 450;
             this.Height = 500;
         }
+
+        // ---------- Create the controls on the form. -----------------
         private void CreateButtonDelegate(object sender, EventArgs e)
         {
             // btnStartServer
@@ -69,13 +72,14 @@ namespace ChattApp
             tbxInbox.Show();
         }
 
+        // ---------- Functions and such. -----------------
         private void btnStartServer_Click(object sender, EventArgs e)
         {
             try
             {
                 listener = new TcpListener(IPAddress.Any, port);
                 listener.Start();
-            }
+            }   
             catch (Exception error) { MessageBox.Show(error.Message, Text); return; }
 
             this.btnStartServer.Enabled = false;
@@ -88,6 +92,19 @@ namespace ChattApp
             while (true)
             {
                 TcpClient client = await listener.AcceptTcpClientAsync();
+
+                // Store client for later use.
+                IPEndPoint endPoint = (IPEndPoint)client.Client.RemoteEndPoint;
+                // Does not seem to actually append anyhting. clientList remains empty
+                if (clientList.Contains(endPoint) == false)
+                {
+                    clientList.Append(endPoint);
+                }
+                foreach (IPEndPoint e in clientList)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+                
                 HandleClient(client);
             }
         }
@@ -100,11 +117,14 @@ namespace ChattApp
             {
                 while ((n = await c.GetStream().ReadAsync(buff, 0, buff.Length)) != 0)
                 {
-                    string message = Encoding.Unicode.GetString(buff, 0, n);
+                    string message = $"{DateTime.Now} - " + Encoding.Unicode.GetString(buff, 0, n);
                     LogMessage(message);
 
-                    // Skicka meddelandet till alla anslutna klienter om du vill
-                    // SkickaTillAllaKlienter(meddelande);
+                    // Send message to all clients.
+                    foreach (IPEndPoint recipient in clientList)
+                    {
+                        ServeMessage(message, recipient);
+                    }
                 }
             }
             catch (Exception error) { MessageBox.Show(error.Message, Text); }
@@ -115,27 +135,23 @@ namespace ChattApp
         {
             if (tbxInbox.InvokeRequired)
             {
-                tbxInbox.Invoke(new MethodInvoker(delegate { tbxInbox.AppendText($"[{DateTime.Now}] - " + message + Environment.NewLine); }));
+                tbxInbox.Invoke(new MethodInvoker(delegate { tbxInbox.AppendText(message + Environment.NewLine); }));
             }
             else
             {
-                tbxInbox.AppendText($"[{DateTime.Now}] - " + message + Environment.NewLine);
+                tbxInbox.AppendText(message + Environment.NewLine);
             }
         }
-        public async void StartRead(TcpClient c)
+        
+        // Using TcpClient to communicate. Would like to switch to socket and save IPEndPoint to attempt to connect to all active clients.
+        // Made the IPEndPoint thing THEORETICALLY work. DOesnt fucking work htoug.
+        private void ServeMessage(string message, IPEndPoint recipient)
         {
-            byte[] buffert = new byte[1024];
-            int n = 0;
-            try
-            {
-                n = await c.GetStream().ReadAsync(buffert, 0, buffert.Length);
-            }
-            catch (Exception error) { MessageBox.Show(error.Message, Text); return; }
-
-            tbxInbox.AppendText(Encoding.Unicode.GetString(buffert, 0, n));
-
-            StartRead(c);
+            TcpClient c = new TcpClient(recipient);
+            
+            byte[] outData = Encoding.Unicode.GetBytes(message);
+            c.GetStream().Write(outData, 0, outData.Length);
+            c.Close();
         }
-
     }
 }

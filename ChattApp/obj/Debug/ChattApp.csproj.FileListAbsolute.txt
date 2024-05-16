@@ -9,3 +9,14 @@ C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.cspro
 C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.exe
 C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.pdb
 C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.Server.resources
+B:\Documents\Programming\cs\ChattApp\ChattApp\bin\Debug\ChattApp.exe.config
+B:\Documents\Programming\cs\ChattApp\ChattApp\bin\Debug\ChattApp.exe
+B:\Documents\Programming\cs\ChattApp\ChattApp\bin\Debug\ChattApp.pdb
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.csproj.AssemblyReference.cache
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.ChattAppLauncher.resources
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.Properties.Resources.resources
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.Server.resources
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.csproj.GenerateResource.cache
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.csproj.CoreCompileInputs.cache
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.exe
+B:\Documents\Programming\cs\ChattApp\ChattApp\obj\Debug\ChattApp.pdb
