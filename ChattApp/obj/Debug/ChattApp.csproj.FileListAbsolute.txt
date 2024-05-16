@@ -1,0 +1,11 @@
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\bin\Debug\ChattApp.exe.config
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\bin\Debug\ChattApp.exe
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\bin\Debug\ChattApp.pdb
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.csprojAssemblyReference.cache
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.ChattAppLauncher.resources
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.Properties.Resources.resources
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.csproj.GenerateResource.cache
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.csproj.CoreCompileInputs.cache
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.exe
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.pdb
+C:\Users\algot.lindblom1\source\repos\ChattApp\ChattApp\obj\Debug\ChattApp.Server.resources
