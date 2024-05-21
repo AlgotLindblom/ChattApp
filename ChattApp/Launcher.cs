@@ -18,9 +18,17 @@ namespace ChattApp
         public ChattAppLauncher()
         {
             InitializeComponent();
-            this.Shown += CreateMembersDelegate;
+            //this.Shown += CreateMembersDelegate;
             this.Width = 170;
             this.Height = 200;
+
+            this.Shown += CreateMembersDelegate;
+
+            Server server = new Server();
+            server.Show();
+            Client client = new Client();
+            client.Show();
+
         }
         private void CreateMembersDelegate(object sender, EventArgs e)
         {

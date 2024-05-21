@@ -52,6 +52,12 @@
     <Compile Include="Client.Designer.cs">
       <DependentUpon>Client.cs</DependentUpon>
     </Compile>
+    <Compile Include="Client2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Client2.Designer.cs">
+      <DependentUpon>Client2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Launcher.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -65,6 +71,12 @@
     </Compile>
     <Compile Include="Server.Designer.cs">
       <DependentUpon>Server.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Server2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Server2.Designer.cs">
+      <DependentUpon>Server2.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Launcher.resx">
       <DependentUpon>Launcher.cs</DependentUpon>

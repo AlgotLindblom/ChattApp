@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,13 +11,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
-
-// TODO: Alternate server + client that makes a new connection for every message.
 
 namespace ChattApp
 {
-    public partial class Server : Form
+    public partial class Server2 : Form
     {
         // Objects need to be in scope. 
         // BUTTON
@@ -24,7 +22,9 @@ namespace ChattApp
         // TEXTBOX
         TextBox tbxAddress = new TextBox();
         TextBox tbxInbox = new TextBox();
-        public Server()
+
+        TcpListener listener;
+        public Server2()
         {
             InitializeComponent();
             // Control WHEN objects are created
@@ -62,11 +62,11 @@ namespace ChattApp
         }
         private async void StartServer(object sender, EventArgs e)
         {
-            TcpListener listener;
             try
             {
                 listener = new TcpListener(IPAddress.Any, 12345);
                 listener.Start();
+                Console.WriteLine("Server: Listener started on port {0}", ((IPEndPoint)listener.LocalEndpoint).Port);
             }
             catch (Exception error) { MessageBox.Show(error.Message, Text); return; }
 
@@ -76,33 +76,46 @@ namespace ChattApp
             while (true)
             {
                 TcpClient clientSocket = await listener.AcceptTcpClientAsync();
-                ClientHandler client = new ClientHandler(tbxInbox);
-                client.startClient(clientSocket);
+                IPEndPoint endPoint = (IPEndPoint)clientSocket.Client.LocalEndPoint;
+                Console.WriteLine("Server: Connection to {0} established at {1}", endPoint.Address, endPoint.Port);
+                ClientHandler2 client = new ClientHandler2(tbxInbox);
+                client.StartClient(clientSocket);
             }
         }
     }
-    class ClientHandler
+    class ClientHandler2
     {
         TcpClient client;
         TextBox tbxLog;
 
-        public ClientHandler(TextBox tbx)
+        public ClientHandler2(TextBox tbx)
         {
             tbxLog = tbx;
         }
-        public void startClient(TcpClient inClient)
+        public void StartClient(TcpClient inClient)
         {
             this.client = inClient;
-            Thread thread = new Thread(stream);
+            Thread thread = new Thread(Stream);
             thread.Start();
         }
-        private void stream()
+        private void Stream()
         {
-            while (true)
+            //while (true)
             {
+                string message;
                 using (var r = new BinaryReader(client.GetStream(), Encoding.UTF8, true))
                 {
-                    LogMessage(r.ReadString());
+                    message = r.ReadString();
+                    Console.WriteLine("Server: Message read");
+                }
+
+                LogMessage(message);
+                Console.WriteLine("Server: Message logged");
+
+                using (var w = new BinaryWriter(client.GetStream(), Encoding.UTF8, true))
+                {
+                    w.Write(message);
+                    Console.WriteLine("Server: Message written to stream");
                 }
             }
         }
@@ -119,6 +132,5 @@ namespace ChattApp
                 tbxLog.AppendText($"{DateTime.Now}" + message + Environment.NewLine);
             }
         }
-
     }
 }

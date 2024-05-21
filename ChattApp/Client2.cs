@@ -1,26 +1,31 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
-using System.IO;
 
 namespace ChattApp
 {
-    public partial class Client : Form
+    public partial class Client2 : Form
     {
         Button btnSendMessage;
 
         TextBox tboxUsername;
         TextBox tboxMessage;
         TextBox tboxInbox;
-        public Client()
+
+        TcpClient client = new TcpClient();
+        IPEndPoint remoteEndPoint= new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12345);
+        //Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        public Client2()
         {
             InitializeComponent();
 
@@ -28,6 +33,11 @@ namespace ChattApp
 
             this.Width = 450;
             this.Height = 400;
+
+            Console.WriteLine("Client: Address: {0}, Port: {1}", remoteEndPoint.Address, remoteEndPoint.Port);
+
+
+
         }
         private void CreateMembersDelegate(object sender, EventArgs e)
         {
@@ -84,14 +94,44 @@ namespace ChattApp
             tboxInbox.Location = new Point(220, 100);
             tboxInbox.Show();
         }
-        private void SendMessage(object sender, EventArgs e)
+        private async void SendMessage(object sender, EventArgs e)
         {
-            TcpClient client = new TcpClient("127.0.0.1", 12345);
-            using (var w = new BinaryWriter(client.GetStream(), Encoding.UTF8, true))
+            if (!client.Connected)
             {
-                w.Write(tboxUsername.Text + ": " + tboxMessage.Text);
+                try
+                {
+                    await client.ConnectAsync(remoteEndPoint.Address, remoteEndPoint.Port);
+                    Console.WriteLine("Client: Client connected");
+                }
+                catch(Exception error) { MessageBox.Show(error.Message); return; }
             }
-            tboxMessage.Text = "";
+            using (NetworkStream ns = client.GetStream())
+            {
+                using (var w = new BinaryWriter(ns, Encoding.UTF8, true))
+                {
+                    w.Write(tboxUsername.Text + ": " + tboxMessage.Text);
+                    Console.WriteLine("Client: Message written to stream");
+                }
+                tboxMessage.Text = "";
+                Recieve(ns);
+            }
+        }
+        private void Recieve(NetworkStream ns)
+        {
+            if (client.Connected)
+            {
+                try
+                {
+                    using (var r = new BinaryReader(ns, Encoding.UTF8, true))
+                    {
+                        Console.WriteLine("Client: Stream read START"); // <- printed
+                        tboxInbox.Text = r.ReadString();                // <- Doesn't go past here.
+                        Console.WriteLine("Client: Stream read");       // <- not printed
+                    }
+                }
+                catch (Exception error) { Console.WriteLine("Client: Stream read failure"); MessageBox.Show(error.Message); return; }
+            }
+
         }
     }
 }
