@@ -76,6 +76,9 @@ namespace ChattApp
             while (true)
             {
                 TcpClient clientSocket = await listener.AcceptTcpClientAsync();
+                IPEndPoint endPoint = (IPEndPoint)clientSocket.Client.LocalEndPoint;
+                Console.WriteLine("Server: Connection to {0} established at {1}", endPoint.Address, endPoint.Port);
+
                 ClientHandler client = new ClientHandler(tbxInbox);
                 client.startClient(clientSocket);
             }

@@ -118,20 +118,16 @@ namespace ChattApp
         }
         private void Recieve(NetworkStream ns)
         {
-            if (client.Connected)
+            try
             {
-                try
+                using (var r = new BinaryReader(ns, Encoding.UTF8, true))
                 {
-                    using (var r = new BinaryReader(ns, Encoding.UTF8, true))
-                    {
-                        Console.WriteLine("Client: Stream read START"); // <- printed
-                        tboxInbox.Text = r.ReadString();                // <- Doesn't go past here.
-                        Console.WriteLine("Client: Stream read");       // <- not printed
-                    }
+                    Console.WriteLine("Client: Stream read START"); // <- printed
+                    tboxInbox.Text = r.ReadString();
+                    Console.WriteLine("Client: Stream read");       // <- not printed
                 }
-                catch (Exception error) { Console.WriteLine("Client: Stream read failure"); MessageBox.Show(error.Message); return; }
             }
-
+            catch (Exception error) { Console.WriteLine("Client: Stream read failure"); MessageBox.Show(error.Message); return; }
         }
     }
 }
