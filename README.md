@@ -4,7 +4,7 @@
 
 Projektet tillhandahåller en klient och en server som Windows Form applikationer. Enbart en server kan vara aktiv samtidigt men en server stöttar en godtycklig mängd klienter.
 
-Projektet innehåller en binärfil under ChatApp/bin/debug som borde gå att köra direkt på en Windows enhet.
+Projektet innehåller en binärfil under [ChatApp/bin/debug](./ChattApp/bin/Debug) som borde gå att köra direkt på en Windows enhet.
 
 ## Problem
 
