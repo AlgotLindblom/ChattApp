@@ -23,11 +23,12 @@ namespace ChattApp
             this.Height = 200;
 
             this.Shown += CreateMembersDelegate;
-
-            Server server = new Server();
+            
+            Server2 server = new Server2();
             server.Show();
-            Client client = new Client();
-            client.Show();
+            Client2 client = new Client2();
+            client.Show(); 
+            
 
         }
         private void CreateMembersDelegate(object sender, EventArgs e)

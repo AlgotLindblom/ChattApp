@@ -1,10 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,6 +51,7 @@ namespace ChattApp
             // Set properties of tbxAdress
             tbxInbox.Multiline = true;
             tbxInbox.Location = new Point(25, 90);
+            tbxInbox.ReadOnly = true;
             tbxInbox.Width = 350;
             tbxInbox.Height = 350;
             tbxInbox.ScrollBars = ScrollBars.Vertical;
@@ -78,8 +75,7 @@ namespace ChattApp
                 TcpClient clientSocket = await listener.AcceptTcpClientAsync();
                 IPEndPoint endPoint = (IPEndPoint)clientSocket.Client.LocalEndPoint;
                 Console.WriteLine("Server: Connection to {0} established at {1}", endPoint.Address, endPoint.Port);
-                ClientHandler2 client = new ClientHandler2(tbxInbox);
-                client.StartClient(clientSocket);
+                ClientHandler2 client = new ClientHandler2(tbxInbox, clientSocket);
             }
         }
     }
@@ -88,13 +84,14 @@ namespace ChattApp
         TcpClient client;
         TextBox tbxLog;
 
-        public ClientHandler2(TextBox tbx)
+        public ClientHandler2(TextBox tbx, TcpClient inClient)
         {
-            tbxLog = tbx;
-        }
-        public void StartClient(TcpClient inClient)
-        {
+            this.tbxLog = tbx;
             this.client = inClient;
+            StartClient();
+        }
+        public void StartClient()
+        {
             Thread thread = new Thread(Stream);
             thread.Start();
         }
@@ -122,15 +119,19 @@ namespace ChattApp
         private void LogMessage(string message)
         {
             // Not fucked.
-            Console.WriteLine($"Server: {message}");
-            if (tbxLog.InvokeRequired)
+            Console.WriteLine($"Server: {message}"); // Dies here.
+            try
             {
-                tbxLog.Invoke(new MethodInvoker(delegate { tbxLog.AppendText($"{DateTime.Now}" + message + Environment.NewLine); }));
+                if (tbxLog.InvokeRequired)
+                {
+                    tbxLog.Invoke(new MethodInvoker(delegate { tbxLog.AppendText($"{DateTime.Now}" + message + Environment.NewLine); }));
+                }
+                else
+                {
+                    tbxLog.AppendText($"{DateTime.Now}" + message + Environment.NewLine);
+                }
             }
-            else
-            {
-                tbxLog.AppendText($"{DateTime.Now}" + message + Environment.NewLine);
-            }
+            catch (Exception error) { MessageBox.Show(error.Message); }
         }
     }
 }

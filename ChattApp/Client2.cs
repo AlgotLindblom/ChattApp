@@ -1,13 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
@@ -123,7 +117,7 @@ namespace ChattApp
                 using (var r = new BinaryReader(ns, Encoding.UTF8, true))
                 {
                     Console.WriteLine("Client: Stream read START"); // <- printed
-                    tboxInbox.Text = r.ReadString();
+                    tboxInbox.Text = r.ReadString();                // Server doesn't send anything :D
                     Console.WriteLine("Client: Stream read");       // <- not printed
                 }
             }
